@@ -1,22 +1,79 @@
-#include <stdio.h>
-#include<String.h>
+#include<stdio.h>
 #include<stdlib.h>
-#define Max 10;
-/*push X : 정수 X를 큐에 넣는 연산이다.
-pop : 큐에서 가장 앞에 있는 정수를 빼고, 그 수를 출력한다.만약 큐에 들어있는 정수가 없는 경우에는 - 1을 출력한다.
-size : 큐에 들어있는 정수의 개수를 출력한다.
-empty : 큐가 비어있으면 1, 아니면 0을 출력한다.
-front : 큐의 가장 앞에 있는 정수를 출력한다.만약 큐에 들어있는 정수가 없는 경우에는 - 1을 출력한다.
-back : 큐의 가장 뒤에 있는 정수를 출력한다.만약 큐에 들어있는 정수가 없는 경우에는 - 1을 출력한다.*/
+#include<stdbool.h>
 typedef struct node {
-	int next;
-	int head;
-	int tail;
-
+	int data;
+	Node* next;
 }Node;
-int main(){
-	
+typedef struct queue {
+	Node* front;
+	Node* rear;
+	int size;
+}*Queue;
+Queue createQueue(void) {
+	Queue q = (Queue)malloc(sizeof(struct queue));
+	q->front = NULL;
+	q->rear = NULL;
+	q->size = 0;
 
+	return q;
+}
+int get_Size(Queue q) {
+	return q->size;
+}
+void delete_queue(Queue q) {
+	make_empty(q);
+	free(q);
+	
+}
+bool is_empty(Queue q) {
+	return q->front == NULL;
+}
+void make_empty(Queue q) {
+	while (!is_empty)
+		dequeue(q);
+	q->size = 0;
+}
+void enqueue(Queue q, int item) {
+	Node* newNode = (Node*)malloc(sizeof(Node));
+	newNode->next = NULL;
+	newNode->data = item;
+
+	if (q->size == 0) {
+		q->front = newNode;
+		q->rear = newNode;
+	}
+	else {
+		q->rear->next = newNode;
+		q->rear = newNode;
+	}
+	q->size++;
+}
+int dequeue(Queue q) {
+	Node* oldNode;
+	int i;
+	oldNode = q->front;
+	i = oldNode->data;
+	q->front = oldNode->next;
+	if (q->front == NULL) {
+		q->rear = NULL;
+	}
+	free(oldNode);
+		
+	q->size--;
+
+	return i;
+}
+int main() {
+	Queue q;
+	int i = 0;
+	q=createQueue();
+	enqueue(q, 8);
+	enqueue(q, 9);
+	enqueue(q, 10);
+	while (!is_empty(q)) {
+		printf("%d" ,q[i]);
+		i++;
+	}
 	return 0;
 }
-
