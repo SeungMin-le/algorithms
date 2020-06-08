@@ -3,7 +3,7 @@
 #include<stdbool.h>
 typedef struct node {
 	int data;
-	Node* next;
+	struct node* next;
 }Node;
 typedef struct queue {
 	Node* front;
@@ -21,11 +21,6 @@ Queue createQueue(void) {
 int get_Size(Queue q) {
 	return q->size;
 }
-void delete_queue(Queue q) {
-	make_empty(q);
-	free(q);
-	
-}
 bool is_empty(Queue q) {
 	return q->front == NULL;
 }
@@ -34,6 +29,13 @@ void make_empty(Queue q) {
 		dequeue(q);
 	q->size = 0;
 }
+void delete_queue(Queue q) {
+	make_empty(q);
+	free(q);
+	
+}
+
+
 void enqueue(Queue q, int item) {
 	Node* newNode = (Node*)malloc(sizeof(Node));
 	newNode->next = NULL;
@@ -67,13 +69,16 @@ int dequeue(Queue q) {
 int main() {
 	Queue q;
 	int i = 0;
+	Node* horse;
 	q=createQueue();
 	enqueue(q, 8);
 	enqueue(q, 9);
 	enqueue(q, 10);
+	horse = q->front;
 	while (!is_empty(q)) {
-		printf("%d" ,q[i]);
+		printf("%d " ,horse->data);
 		i++;
+		horse = horse->next;
 	}
 	return 0;
 }
