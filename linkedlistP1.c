@@ -60,7 +60,7 @@ int* yose(Table T,int n, int k) {
 	resultNum = (int*)malloc(sizeof(int) * n);
 	connectNode(T, n);
 	T->index = T->head;
-	while (count==(k-1)) {
+	while (count!=(k-1)) {
 		for (int i = 1; i <= k; i++) {
 			
 			indexNum = i;
@@ -71,30 +71,40 @@ int* yose(Table T,int n, int k) {
 					T->head = T->head->next;
 				else if (T->index == T->tail)
 					T->tail = T->tail->prev;
-				
+				T->index->prev->next = T->index->next;
+				T->index->next->prev = T->index->prev;
 				count--;
 				
 			}
 			T->index = T->index->next;
+			
 			/*index로 k번째에 있는
 			정수 지우고 지워진 정수 배열에 저장하고 
 			지운 노드 앞뒤 연결*/
 		}
 	}
-	for (int i = 0; i < 7; i++) {
-		printf("%d", resultNum[i]);
+	int surNum=k;
+	while ((surNum-1) != 0) {
+		resultNum[resultNumindex++] = T->index->data;
+		T->index = T->index->next;
+		surNum--;
 	}
+	
 	return resultNum;
 }
 int main() {
 
 	Table T = createTable();
-	int* result=yose(T, 7, 3);
+	int n;
+	int k;
 	
-	
-	for (int i = 0; i < 7; i++) {
-		printf("%d",result[i]);
+	printf("n,k를 입력하시오");
+	scanf_s("%d %d", &n, &k);
+	int* result = yose(T, n, k);
+	printf("요세푸스 순열{");
+	for (int i = 0; i < n; i++) {
+		printf("%d ",result[i]);
 	}
-	
+	printf("}\n");
 	return 0;
 }
