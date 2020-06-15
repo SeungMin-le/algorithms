@@ -3,6 +3,7 @@
 
 struct bucket* hashTable = NULL;
 int Size = 10;
+int flag = 0;
 typedef struct node {
 	struct node* next;
 	int key;
@@ -22,17 +23,24 @@ Node* createNode(int key, int value) {
 int hashfunction(int key) {
 	return key % Size;
 }
-void insert(int key, int value){
-	printf("1");
+void insert(int key, int value) {
+	if (flag == 0) {
+		hashTable = (struct bucket*)malloc(sizeof(struct bucket) * Size);
+		for (int i = 0; i < Size; i++) {
+			hashTable[i].count = 0;
+			hashTable[i].head = NULL;
+		}
+		flag = 1;
+	}
 	Node* node = createNode(key, value);
-	printf("2");
+	
 	int tableIndex = hashfunction(key);
-	printf("1");
-	hashTable->count = 0;
-	if (hashTable->count == 0) {
+	
+
+	if (hashTable[tableIndex].count == 0) {
 		
 		hashTable[tableIndex].head = node;
-		
+
 	}
 	else {
 		node->next = hashTable[tableIndex].head;
@@ -47,7 +55,7 @@ void search(int key) {
 	if (node == NULL)
 		printf("key not found");
 	else {
-		while (hashTable[tableIndex].count!=0) {
+		while (hashTable[tableIndex].count != 0) {
 			if (key == node->key) {
 				printf("\nkey->%d value->%d \n", node->key, node->value);
 				return;
@@ -61,16 +69,19 @@ void search(int key) {
 void delete(int key) {
 	int tableIndex = hashfunction(key);
 	Node* node = hashTable[tableIndex].head;
-	Node* trace=node;
+	Node* trace = node;
+	
+	
 	if (node == NULL) {
 		printf("key not found");
+
 	}
 	while (node != NULL) {
 		if (node->key == key) {
 			if (node == hashTable[tableIndex].head)
 				node->next = hashTable[tableIndex].head;
 			trace->next = node->next;
-		
+
 			free(node);
 			hashTable[tableIndex].count--;
 			return;
@@ -85,10 +96,10 @@ void display() {
 	int i = 0;
 	printf("\n---------------------------------------------\n");
 	for (i = 0; i < Size; i++) {
-		horse= hashTable[i].head;
-		printf("hashTable[%d]=",i);
+		horse = hashTable[i].head;
+		printf("hashTable[%d]=", i);
 		for (int j = 0; j < hashTable[i].count; j++) {
-			printf("{%d, %d}",horse->key,horse->value);
+			printf("{%d, %d}", horse->key, horse->value);
 			horse = horse->next;
 		}
 		printf("\n");
@@ -96,12 +107,16 @@ void display() {
 	printf("\n----------------the end----------------------\n");
 }
 int main() {
-	
+
 	insert(0, 3);
-	insert(3, 4);
-	insert(5, 9);
-	printf("1");
+	insert(1, 4);
+	insert(2, 5);
+	insert(33, 56);
+	delete(33);
+	search(1);
 	display();
 
-		return 0;
+	
+
+	return 0;
 }
